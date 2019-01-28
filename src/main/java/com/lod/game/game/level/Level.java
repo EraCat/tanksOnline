@@ -5,6 +5,7 @@ import com.lod.game.graphics.TextureAtlas;
 import com.lod.game.utils.ResourceLoader;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +39,15 @@ public class Level {
                 TILE_IN_GAME_SCALE, TileType.EMPTY));
 
         tileMap = ResourceLoader.lvlParser(lvlPath);
-
+        grassCords = new ArrayList<>();
+        for (int i = 0; i < tileMap.length; i++) {
+            for (int j = 0; j < tileMap[i].length; j++) {
+                Tile tile = tiles.get(TileType.fromNumeric(tileMap[i][j]));
+                if (tile.getType() == TileType.GRASS) {
+                    grassCords.add(new Point(j * SCALED_TILE_SIZE, i * SCALED_TILE_SIZE));
+                }
+            }
+        }
     }
 
     public void update() {
@@ -49,13 +58,17 @@ public class Level {
         for (int i = 0; i < tileMap.length; i++) {
             for (int j = 0; j < tileMap[i].length; j++) {
                 Tile tile = tiles.get(TileType.fromNumeric(tileMap[i][j]));
-                if (tile.getType() == TileType.GRASS) {
-
-                } else {
+                if (tile.getType() != TileType.GRASS) {
                     tile.render(graphics, j * SCALED_TILE_SIZE, i * SCALED_TILE_SIZE);
                 }
             }
         }
 
+    }
+
+    public void renderGrass(Graphics2D graphics) {
+        for (Point grassCord : grassCords) {
+            tiles.get(TileType.GRASS).renderGrass(graphics, grassCord.x, grassCord.y);
+        }
     }
 }

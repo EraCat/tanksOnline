@@ -19,6 +19,20 @@ public class Tile {
         graphics.drawImage(image, x , y, null);
     }
 
+    public void renderGrass(Graphics2D graphics, int x, int y) {
+        if (type == TileType.GRASS) {
+            for (int i = 0; i < image.getWidth(); i++) {
+                for (int j = 0; j < image.getHeight(); j++) {
+                    int pixel = image.getRGB(i, j);
+                    if ((pixel & 0x00FFFFFF) < 100000) {
+                        image.setRGB(i, j, pixel & 0x00FFFFFF);
+                    }
+                }
+            }
+        }
+        graphics.drawImage(image, x , y, null);
+    }
+
     public TileType getType() {
         return type;
     }
